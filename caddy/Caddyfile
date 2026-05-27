@@ -1,0 +1,12 @@
+# Placeholder Caddyfile — full production config lands in Phase 4
+# (after DNS is configured at webname.uz and the domain resolves to this server).
+#
+# Phase 4 will replace this with:
+#   - https://tetrasoft.uz auto-SSL via Let's Encrypt
+#   - reverse_proxy /api/* to backend:3000
+#   - file_server / from frontend:80
+#   - HSTS + security headers + modern TLS only
+
+:80 {
+    respond "tetrasoft.uz placeholder — Phase 4 will replace this Caddyfile" 200
+}

@@ -1,0 +1,68 @@
+# docker-compose.yml — tetrasoft.uz production stack
+#
+# Services:
+#   frontend  — Caddy-Alpine serving the prebuilt Astro static site on :80 (internal)
+#   backend   — Node.js (Hono + grammY) on :3000 (internal); persists leads to a named volume
+#   caddy     — Public TLS-terminating reverse proxy on :80/:443 (auto Let's Encrypt)
+#
+# Networks:
+#   web — shared private network; only `caddy` publishes ports to the host.
+#
+# Volumes:
+#   caddy_data    — TLS certs + ACME state (must persist across restarts)
+#   caddy_config  — Caddy runtime config snapshot
+#   backend_data  — SQLite database file lives here (/data/leads.db inside container)
+
+name: tetrasoft
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    image: tetrasoft/frontend:latest
+    restart: unless-stopped
+    networks:
+      - web
+    # No port publishing — only the public `caddy` reaches this over the internal network.
+
+  backend:
+    build:
+      context: ./backend
+    image: tetrasoft/backend:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      SQLITE_FILE: /data/leads.db
+    volumes:
+      - backend_data:/data
+    networks:
+      - web
+
+  caddy:
+    image: caddy:2.11-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"      # HTTP (also used by Let's Encrypt ACME http-01 challenge)
+      - "443:443"    # HTTPS
+      - "443:443/udp" # HTTP/3 (QUIC)
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data         # certs + ACME state (DO NOT delete)
+      - caddy_config:/config
+    networks:
+      - web
+    depends_on:
+      - frontend
+      - backend
+
+networks:
+  web:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
+  backend_data:
