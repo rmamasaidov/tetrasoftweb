@@ -1,12 +1,75 @@
-# Placeholder Caddyfile — full production config lands in Phase 4
-# (after DNS is configured at webname.uz and the domain resolves to this server).
+# caddy/Caddyfile — production reverse proxy for tetrasoft.uz
 #
-# Phase 4 will replace this with:
-#   - https://tetrasoft.uz auto-SSL via Let's Encrypt
-#   - reverse_proxy /api/* to backend:3000
-#   - file_server / from frontend:80
-#   - HSTS + security headers + modern TLS only
+# Caddy handles:
+#   - automatic Let's Encrypt SSL for tetrasoft.uz + www.tetrasoft.uz
+#   - HTTP -> HTTPS redirect (Caddy does this by default for explicit hostnames)
+#   - HTTP/3 (QUIC) on :443/udp
+#   - modern TLS (1.2+), HSTS, sensible security headers
+#   - /api/* reverse-proxied to backend:3000
+#   - everything else proxied to frontend:80 (Caddy serving static dist/)
 
-:80 {
-    respond "tetrasoft.uz placeholder — Phase 4 will replace this Caddyfile" 200
+# ----- Global options -----
+{
+	# Operations email used by Let's Encrypt for cert-expiry warnings.
+	# Change to a Tetrasoft-controlled inbox once a real mailbox exists.
+	email rustammamasaidov@gmail.com
+
+	# Restrict to TLS 1.2 minimum. Anything below has known weaknesses.
+	servers {
+		protocols h1 h2 h3
+	}
+
+	# Logs to stdout — captured by docker logs / docker compose logs caddy.
+}
+
+# ----- Redirect www -> apex (single canonical hostname) -----
+www.tetrasoft.uz {
+	redir https://tetrasoft.uz{uri} permanent
+}
+
+# ----- Main site -----
+tetrasoft.uz {
+	# Compression for text-based responses.
+	encode gzip zstd
+
+	# ---- Security headers ----
+	header {
+		# HSTS: force HTTPS for 1 year, include subdomains, preload-eligible.
+		# Only enable preload once the site is stable; removing preload is painful.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+		# Clickjacking, MIME sniffing, referrer policy.
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+
+		# Lock down powerful browser features by default; loosen per-feature if needed.
+		Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+
+		# Hide the upstream Caddy version banner.
+		-Server
+	}
+
+	# ---- API: forward /api/* to the backend container ----
+	# Using `handle` (not `handle_path`) so the /api prefix is preserved —
+	# Hono routes are defined as /api/health, /api/lead, etc.
+	handle /api/* {
+		# Caddy automatically forwards X-Forwarded-For and X-Forwarded-Proto.
+		# Add X-Real-IP explicitly so backend rate-limiting can key off the
+		# client IP without parsing the XFF chain.
+		reverse_proxy backend:3000 {
+			header_up X-Real-IP {remote_host}
+		}
+	}
+
+	# ---- Everything else: static site (Caddy in the frontend container) ----
+	handle {
+		reverse_proxy frontend:80
+	}
+
+	# Access log to stdout (captured by `docker compose logs caddy`).
+	log {
+		output stdout
+		format console
+	}
 }
