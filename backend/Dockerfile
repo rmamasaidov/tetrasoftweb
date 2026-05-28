@@ -23,6 +23,12 @@ RUN npm prune --omit=dev
 FROM node:22-alpine AS runtime
 WORKDIR /app
 
+# Create the SQLite data directory owned by `node` BEFORE switching users.
+# When the named volume mounts here, Docker initializes a fresh volume from
+# the underlying image dir (preserving this ownership). Without this, the
+# volume mountpoint is owned by root and the unprivileged process can't write.
+RUN mkdir -p /data && chown node:node /data
+
 # Run as the unprivileged 'node' user that node:alpine ships with.
 USER node
 

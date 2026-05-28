@@ -1,6 +1,9 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { config } from './config.js';
+import { leadRoutes } from './lead.js';
+// Side-effect import: starts the grammY bot if credentials are configured.
+import './telegram.js';
 
 const app = new Hono();
 
@@ -13,13 +16,17 @@ app.get('/api/health', (c) =>
   }),
 );
 
-// /api/lead is implemented in Phase 5.
+app.route('/api', leadRoutes);
 
 const server = serve({ fetch: app.fetch, port: config.port });
 
-console.log(`[tetrasoft-backend] listening on :${config.port} (NODE_ENV=${config.nodeEnv})`);
+console.log(
+  `[tetrasoft-backend] listening on :${config.port} (NODE_ENV=${config.nodeEnv})`,
+);
 if (!config.telegram.botToken || !config.telegram.adminChatId) {
-  console.warn('[tetrasoft-backend] Telegram credentials not configured — bot disabled (Phase 5 will require them).');
+  console.warn(
+    '[tetrasoft-backend] Telegram credentials not configured — bot disabled.',
+  );
 }
 
 function shutdown(signal: NodeJS.Signals): void {
