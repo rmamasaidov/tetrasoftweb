@@ -1,0 +1,54 @@
+# Deploy tetrasoft.uz on push to main.
+#
+# Strategy: pull-based. Actions SSHes into the Hetzner host and runs
+# scripts/deploy.sh, which fast-forwards the working tree, rebuilds
+# the docker images locally on the server, and waits for /api/health.
+#
+# Required repository secrets:
+#   DEPLOY_HOST     — public IP or hostname of the Hetzner box
+#   DEPLOY_USER     — SSH user (tetrasoft)
+#   DEPLOY_SSH_KEY  — full private key (OpenSSH PEM) matching the
+#                     deploy public key in ~/.ssh/authorized_keys on
+#                     the server. The authorized_keys entry is pinned
+#                     to scripts/deploy.sh via a `command=` restriction,
+#                     so this key cannot open a shell even if leaked.
+#   DEPLOY_KNOWN_HOSTS — output of `ssh-keyscan -t ed25519,rsa <host>`,
+#                     pre-pinned host keys (prevents MITM on first run).
+
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+          printf '%s\n' "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Trigger remote deploy
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          # The remote command is irrelevant — authorized_keys forces
+          # scripts/deploy.sh on this key. We pass "deploy" purely as
+          # an audit hint in the server's auth log.
+          ssh -i ~/.ssh/deploy \
+              -o BatchMode=yes \
+              -o StrictHostKeyChecking=yes \
+              "$DEPLOY_USER@$DEPLOY_HOST" deploy
