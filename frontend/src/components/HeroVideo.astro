@@ -4,9 +4,25 @@ import SectionEyebrow from './SectionEyebrow.astro';
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero__bg" aria-hidden="true">
-    <!-- Placeholder gradient; real video swapped in Phase C -->
+    <!-- Brand-gradient fallback (also shows behind video while it loads) -->
     <div class="hero__gradient"></div>
-    <div class="hero__noise"></div>
+
+    <!-- Poster always present; covers full bg. On mobile (and reduced-motion) this is the entire visual. -->
+    <img
+      class="hero__poster"
+      src="/video/hero-poster.jpg"
+      alt=""
+      width="1920"
+      height="1080"
+      decoding="async"
+      fetchpriority="high"
+    />
+
+    <!-- Video mount point; JS injects <video> only on viewports ≥720px with motion allowed -->
+    <div class="hero__video-mount" data-hero-video data-poster="/video/hero-poster.jpg"></div>
+
+    <!-- Bottom-to-top fade for legibility -->
+    <div class="hero__scrim"></div>
   </div>
 
   <div class="container-x hero__inner">
@@ -29,12 +45,10 @@ import SectionEyebrow from './SectionEyebrow.astro';
     position: relative;
     isolation: isolate;
     color: var(--text-on-dark);
-    /* Header is sticky 72px; we want hero to feel full-height yet leave space */
     min-height: clamp(540px, 88vh, 760px);
     display: flex;
     align-items: center;
     overflow: hidden;
-    /* Pull up under transparent header */
     margin-top: -72px;
     padding-top: 72px;
   }
@@ -43,6 +57,7 @@ import SectionEyebrow from './SectionEyebrow.astro';
     position: absolute;
     inset: 0;
     z-index: -1;
+    background: var(--brand-dark);
   }
 
   .hero__gradient {
@@ -54,12 +69,27 @@ import SectionEyebrow from './SectionEyebrow.astro';
       linear-gradient(160deg, #0A1330 0%, #060B22 70%, #0A1330 100%);
   }
 
-  .hero__noise {
+  .hero__poster,
+  .hero__video-mount video {
     position: absolute;
     inset: 0;
-    opacity: 0.5;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Tone the bright bg so foreground copy reads cleanly */
+    opacity: 0.55;
+    mix-blend-mode: screen;
+  }
+
+  /* Video, once injected, sits above the poster */
+  .hero__video-mount video { z-index: 1; }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
     background:
-      linear-gradient(180deg, transparent 70%, rgba(6, 11, 34, 0.6) 100%);
+      linear-gradient(180deg, rgba(10, 19, 48, 0.25) 0%, transparent 30%, rgba(6, 11, 34, 0.6) 100%);
+    z-index: 2;
   }
 
   .hero__inner {
@@ -94,4 +124,37 @@ import SectionEyebrow from './SectionEyebrow.astro';
     .hero { min-height: 560px; }
     .hero__cta .btn { flex: 1 1 auto; }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video-mount video { display: none; }
+  }
 </style>
+
+<script>
+  // Only inject the video on viewports ≥720px AND when motion is allowed.
+  // Mobile and reduced-motion users get the poster only — no video bytes downloaded.
+  const mount = document.querySelector<HTMLElement>('[data-hero-video]');
+  const canMotion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wideEnough = window.matchMedia('(min-width: 720px)').matches;
+  if (mount && canMotion && wideEnough) {
+    const poster = mount.dataset.poster ?? '';
+    const video = document.createElement('video');
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    if (poster) video.poster = poster;
+    video.setAttribute('aria-hidden', 'true');
+
+    const webm = document.createElement('source');
+    webm.src = '/video/hero.webm';
+    webm.type = 'video/webm';
+    const mp4 = document.createElement('source');
+    mp4.src = '/video/hero.mp4';
+    mp4.type = 'video/mp4';
+    video.append(webm, mp4);
+
+    mount.appendChild(video);
+  }
+</script>
