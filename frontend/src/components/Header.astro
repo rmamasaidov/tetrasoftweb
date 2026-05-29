@@ -1,0 +1,229 @@
+---
+interface Props {
+  /** When true, header starts transparent over a dark hero and turns white on scroll.
+   *  When false (inner pages without hero), header starts white. */
+  overHero?: boolean;
+  /** Current path — used to highlight active nav link */
+  currentPath?: string;
+}
+const { overHero = false, currentPath = '' } = Astro.props;
+
+const nav = [
+  { href: '/about', label: 'О компании' },
+  { href: '/services', label: 'Услуги' },
+  { href: '/portfolio', label: 'Портфолио' },
+  { href: '/contacts', label: 'Контакты' },
+];
+
+function isActive(href: string) {
+  if (!currentPath) return false;
+  if (href === '/') return currentPath === '/';
+  return currentPath === href || currentPath.startsWith(href + '/');
+}
+---
+
+<header
+  id="site-header"
+  class:list={[
+    "site-header",
+    overHero ? "over-hero" : "solid",
+  ]}
+  data-over-hero={overHero ? "true" : "false"}
+>
+  <div class="container-x site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="TETRASOFT — на главную">
+      TETRASOFT
+    </a>
+
+    <nav class="site-header__nav" aria-label="Основная навигация">
+      {nav.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={["site-header__link", { "is-active": isActive(href) }]}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <a href="/#contact" class="btn btn-primary site-header__cta">
+      Обсудить проект
+    </a>
+
+    <button
+      type="button"
+      class="site-header__burger"
+      aria-label="Открыть меню"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div id="mobile-nav" class="site-header__mobile" hidden>
+    <nav aria-label="Мобильная навигация">
+      {nav.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={["site-header__mobile-link", { "is-active": isActive(href) }]}
+        >
+          {label}
+        </a>
+      ))}
+      <a href="/#contact" class="btn btn-primary">Обсудить проект</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* Over hero — transparent, white text */
+  .site-header.over-hero {
+    background: transparent;
+    color: var(--text-on-dark);
+  }
+
+  /* Solid — white background, dark text, subtle shadow */
+  .site-header.solid {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(8px);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
+    color: var(--text-primary);
+    border-bottom-color: var(--border-light);
+    box-shadow: 0 1px 4px rgba(10, 19, 48, 0.04);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 72px;
+  }
+
+  .site-header__logo {
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: 0.06em;
+    color: inherit;
+  }
+
+  .site-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-left: auto;
+  }
+
+  .site-header__link {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: inherit;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, color 0.2s ease;
+  }
+
+  .site-header__link:hover { opacity: 1; }
+
+  .site-header__link.is-active {
+    opacity: 1;
+    color: var(--brand-blue);
+  }
+
+  .site-header.over-hero .site-header__link.is-active {
+    color: var(--brand-blue-light);
+  }
+
+  .site-header__cta {
+    padding: 0.625rem 1.125rem;
+    font-size: 0.875rem;
+  }
+
+  /* Burger — mobile only */
+  .site-header__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: auto;
+  }
+  .site-header__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .site-header__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .site-header__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .site-header__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .site-header__mobile {
+    background: var(--bg-white);
+    border-bottom: 1px solid var(--border-light);
+    padding: 1rem 1.25rem 1.5rem;
+  }
+  .site-header__mobile[hidden] { display: none; }
+  .site-header__mobile nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .site-header__mobile-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    padding: 0.25rem 0;
+  }
+  .site-header__mobile-link.is-active { color: var(--brand-blue); }
+
+  @media (max-width: 880px) {
+    .site-header__nav,
+    .site-header__cta { display: none; }
+    .site-header__burger { display: flex; }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header');
+  if (header && header.dataset.overHero === 'true') {
+    const update = () => {
+      if (window.scrollY > 50) {
+        header.classList.add('solid');
+        header.classList.remove('over-hero');
+      } else {
+        header.classList.remove('solid');
+        header.classList.add('over-hero');
+      }
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
+  const burger = document.querySelector<HTMLButtonElement>('.site-header__burger');
+  const mobile = document.getElementById('mobile-nav');
+  if (burger && mobile) {
+    burger.addEventListener('click', () => {
+      const open = burger.getAttribute('aria-expanded') === 'true';
+      burger.setAttribute('aria-expanded', String(!open));
+      if (open) {
+        mobile.setAttribute('hidden', '');
+      } else {
+        mobile.removeAttribute('hidden');
+      }
+    });
+  }
+</script>

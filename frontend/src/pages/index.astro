@@ -1,168 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { t, type Locale } from '../i18n';
-
-const lang: Locale = 'ru';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-
-<Layout title={`${t(lang, 'site.title')} — ${t(lang, 'site.tagline')}`} lang={lang}>
-  <main class="mx-auto max-w-3xl px-6 py-24">
-    <h1 class="text-4xl font-semibold tracking-tight sm:text-5xl">
-      {t(lang, 'hero.heading')}
-    </h1>
-    <p class="mt-6 text-lg text-slate-600">
-      {t(lang, 'site.tagline')}
-    </p>
-    <a
-      href="#contact"
-      class="mt-10 inline-block rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white hover:bg-slate-700 transition-colors"
-    >
-      {t(lang, 'hero.cta')}
-    </a>
-  </main>
-
-  <section id="contact" class="mx-auto max-w-2xl px-6 pb-24">
-    <h2 class="text-3xl font-semibold tracking-tight">
-      {t(lang, 'contact.heading')}
-    </h2>
-    <p class="mt-3 text-slate-600">
-      {t(lang, 'contact.subheading')}
-    </p>
-
-    <form
-      id="lead-form"
-      class="mt-8 space-y-5"
-      data-msg-success={t(lang, 'contact.success')}
-      data-msg-error={t(lang, 'contact.error')}
-      data-msg-rate={t(lang, 'contact.error.rate')}
-      data-msg-validation={t(lang, 'contact.error.validation')}
-      data-msg-sending={t(lang, 'contact.sending')}
-      data-msg-submit={t(lang, 'contact.submit')}
-    >
-      <input type="hidden" name="source" value="homepage_contact_form" />
-
-      <div>
-        <label for="lead-name" class="block text-sm font-medium text-slate-700">
-          {t(lang, 'contact.name')}
-        </label>
-        <input
-          id="lead-name"
-          name="name"
-          type="text"
-          required
-          maxlength="100"
-          autocomplete="name"
-          placeholder={t(lang, 'contact.name.placeholder')}
-          class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none"
-        />
-      </div>
-
-      <div>
-        <label for="lead-contact" class="block text-sm font-medium text-slate-700">
-          {t(lang, 'contact.contact')}
-        </label>
-        <input
-          id="lead-contact"
-          name="contact"
-          type="text"
-          required
-          maxlength="200"
-          autocomplete="tel email"
-          placeholder={t(lang, 'contact.contact.placeholder')}
-          class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none"
-        />
-      </div>
-
-      <div>
-        <label for="lead-message" class="block text-sm font-medium text-slate-700">
-          {t(lang, 'contact.message')}
-        </label>
-        <textarea
-          id="lead-message"
-          name="message"
-          rows="4"
-          maxlength="2000"
-          placeholder={t(lang, 'contact.message.placeholder')}
-          class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none"
-        ></textarea>
-      </div>
-
-      <button
-        type="submit"
-        class="rounded-md bg-slate-900 px-6 py-3 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-      >
-        {t(lang, 'contact.submit')}
-      </button>
-
-      <p id="lead-status" class="text-sm" aria-live="polite"></p>
-    </form>
+<BaseLayout
+  title="TETRASOFT — Корпоративная и государственная разработка ПО в Узбекистане"
+  description="Разработка информационных систем для государственных органов и крупного бизнеса Узбекистана с 1997 года. Резидент IT Park. 17+ зарегистрированных программных продуктов."
+  overHero={true}
+>
+  <section class="section-pad" style="background: var(--brand-dark); color: var(--text-on-dark); min-height: 60vh;">
+    <div class="container-x">
+      <p class="eyebrow eyebrow-on-dark">Резидент IT Park · с 1997 года</p>
+      <h1 style="margin-top: 1rem; color: var(--text-on-dark);">
+        Информационные системы для государства и бизнеса
+      </h1>
+      <p style="color: var(--text-on-dark-muted); max-width: 56ch; margin-top: 1.25rem;">
+        28 лет создаём решения, которым доверяют крупнейшие государственные органы Узбекистана
+      </p>
+    </div>
   </section>
-
-  <footer class="border-t border-slate-200 mt-24 py-8 text-center text-sm text-slate-500">
-    {t(lang, 'footer.copy')}
-  </footer>
-
-  <script>
-    const form = document.getElementById('lead-form') as HTMLFormElement | null;
-    const status = document.getElementById('lead-status') as HTMLParagraphElement | null;
-    const button = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-    if (form && status && button) {
-      const msg = {
-        success: form.dataset.msgSuccess ?? '',
-        error: form.dataset.msgError ?? '',
-        rate: form.dataset.msgRate ?? '',
-        validation: form.dataset.msgValidation ?? '',
-        sending: form.dataset.msgSending ?? '',
-        submit: form.dataset.msgSubmit ?? '',
-      };
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        status.textContent = '';
-        status.className = 'text-sm';
-
-        const data = new FormData(form);
-        const name = String(data.get('name') ?? '').trim();
-        const contact = String(data.get('contact') ?? '').trim();
-        if (!name || !contact) {
-          status.textContent = msg.validation;
-          status.className = 'text-sm text-red-600';
-          return;
-        }
-
-        button.disabled = true;
-        button.textContent = msg.sending;
-
-        try {
-          const res = await fetch('/api/lead', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name,
-              contact,
-              message: String(data.get('message') ?? ''),
-              source: String(data.get('source') ?? ''),
-            }),
-          });
-          if (res.ok) {
-            form.reset();
-            status.textContent = msg.success;
-            status.className = 'text-sm text-green-700';
-          } else if (res.status === 429) {
-            status.textContent = msg.rate;
-            status.className = 'text-sm text-red-600';
-          } else {
-            status.textContent = msg.error;
-            status.className = 'text-sm text-red-600';
-          }
-        } catch {
-          status.textContent = msg.error;
-          status.className = 'text-sm text-red-600';
-        } finally {
-          button.disabled = false;
-          button.textContent = msg.submit;
-        }
-      });
-    }
-  </script>
-</Layout>
+</BaseLayout>

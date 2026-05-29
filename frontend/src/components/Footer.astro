@@ -1,0 +1,141 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container-x site-footer__inner">
+    <div class="site-footer__col">
+      <div class="site-footer__logo">TETRASOFT</div>
+      <p class="site-footer__tagline">
+        Корпоративная и государственная разработка ПО с 1997 года.
+      </p>
+    </div>
+
+    <div class="site-footer__col">
+      <h4 class="site-footer__title">Контакты</h4>
+      <address class="site-footer__contact">
+        <span>100098, г. Ташкент, Алмазарский район,<br />Каракамыш-1/3, 35, оф. 5</span>
+        <a href="tel:+998712407805">+998 71 240-78-05</a>
+        <a href="tel:+998983015164">+998 98 301-51-64</a>
+        <a href="mailto:info@tetrasoft.uz">info@tetrasoft.uz</a>
+      </address>
+    </div>
+
+    <div class="site-footer__col">
+      <h4 class="site-footer__title">Навигация</h4>
+      <nav class="site-footer__nav" aria-label="Навигация в подвале">
+        <a href="/about">О компании</a>
+        <a href="/services">Услуги</a>
+        <a href="/portfolio">Портфолио</a>
+        <a href="/contacts">Контакты</a>
+      </nav>
+    </div>
+
+    <div class="site-footer__col">
+      <h4 class="site-footer__title">Реквизиты</h4>
+      <ul class="site-footer__details">
+        <li>ООО «TETRASOFT»</li>
+        <li>ИНН: 202430867</li>
+        <li>ОКЭД: 62.01</li>
+        <li>Резидент IT Park с 03.12.2019</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <div class="container-x">
+      © TETRASOFT, 1997–{year}. Все права защищены.
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-darker);
+    color: var(--text-on-dark-muted);
+    padding-top: 4rem;
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .site-footer__col {
+    min-width: 0;
+  }
+
+  .site-footer__logo {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.06em;
+    color: var(--text-on-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .site-footer__tagline {
+    font-size: 0.9375rem;
+    color: var(--text-on-dark-muted);
+    max-width: 22ch;
+  }
+
+  .site-footer__title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-on-dark);
+    margin-bottom: 1rem;
+  }
+
+  .site-footer__contact {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    color: var(--text-on-dark-muted);
+  }
+  .site-footer__contact a { transition: color 0.2s ease; }
+  .site-footer__contact a:hover { color: var(--text-on-dark); }
+
+  .site-footer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+  }
+  .site-footer__nav a:hover { color: var(--text-on-dark); }
+
+  .site-footer__details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .site-footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-block: 1.5rem;
+    font-size: 0.8125rem;
+    color: var(--text-on-dark-muted);
+  }
+
+  @media (max-width: 880px) {
+    .site-footer__inner {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

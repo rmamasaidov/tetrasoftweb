@@ -1,0 +1,9 @@
+---
+interface Props {
+  text: string;
+  onDark?: boolean;
+  as?: 'span' | 'p' | 'div';
+}
+const { text, onDark = false, as: Tag = 'span' } = Astro.props;
+---
+<Tag class:list={["eyebrow", { "eyebrow-on-dark": onDark }]}>{text}</Tag>

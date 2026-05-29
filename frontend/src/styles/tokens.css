@@ -1,0 +1,44 @@
+/* tokens.css — Tetrasoft design tokens.
+   ALL brand colors are placeholders that will be swapped in one place
+   when the final logo is delivered. Never hardcode hex in components. */
+
+:root {
+  /* Brand — temporary, replace after logo */
+  --brand-dark: #0A1330;        /* deep navy: hero, dark sections, CTA */
+  --brand-navy: #1C2E6F;        /* brand blue: headings, accents */
+  --brand-blue: #1971C2;        /* active blue: buttons, links, icons */
+  --brand-blue-light: #85B7EB;  /* light blue: badges on dark */
+  --brand-accent: #5DCAA5;      /* mint accent: + in numbers, small highlights */
+
+  /* Neutrals */
+  --bg-white: #FFFFFF;
+  --bg-light: #F8FAFC;
+  --bg-dark: #0A1330;
+  --bg-darker: #060B22;          /* footer (darker than CTA) */
+  --text-primary: #1A1F36;
+  --text-secondary: #5A6178;
+  --text-on-dark: #FFFFFF;
+  --text-on-dark-muted: rgba(255, 255, 255, 0.65);
+
+  /* Borders */
+  --border-light: #E3E8F0;
+  --border-dark: rgba(255, 255, 255, 0.08);
+
+  /* Icon tints (per homepage.md service cards) */
+  --tint-mint: #E1F5EE;
+  --tint-sand: #FAEEDA;
+  --tint-lavender: #EEEDFE;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows (use minimally, light cards on hover) */
+  --shadow-card: 0 1px 3px rgba(10, 19, 48, 0.06);
+  --shadow-card-hover: 0 8px 24px rgba(10, 19, 48, 0.10);
+
+  /* Type scale */
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}

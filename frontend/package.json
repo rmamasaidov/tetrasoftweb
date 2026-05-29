@@ -13,8 +13,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.3.8",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "4.1.18",
+    "astro": "^6.3.8",
     "tailwindcss": "4.1.18"
   }
 }

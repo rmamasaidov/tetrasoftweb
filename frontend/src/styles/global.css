@@ -1,1 +1,207 @@
 @import "tailwindcss";
+
+/* Local Inter font (4 weights) */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* Design tokens */
+@import "./tokens.css";
+
+/* Tailwind v4 theme — expose tokens as utility classes */
+@theme {
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-light: var(--brand-blue-light);
+  --color-brand-accent: var(--brand-accent);
+  --color-bg-light: var(--bg-light);
+  --color-bg-dark: var(--bg-dark);
+  --color-bg-darker: var(--bg-darker);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-on-dark: var(--text-on-dark);
+  --color-text-on-dark-muted: var(--text-on-dark-muted);
+  --color-border-light: var(--border-light);
+  --color-border-dark: var(--border-dark);
+  --color-tint-mint: var(--tint-mint);
+  --color-tint-sand: var(--tint-sand);
+  --color-tint-lavender: var(--tint-lavender);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --font-sans: var(--font-sans);
+}
+
+/* Base typography */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-white);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+h1 { font-size: clamp(1.875rem, 2.4vw + 1rem, 3rem); }
+h2 { font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); }
+h3 { font-size: clamp(1.125rem, 0.6vw + 1rem, 1.375rem); }
+
+p { color: var(--text-secondary); }
+
+a { color: inherit; text-decoration: none; }
+
+/* Layout helpers */
+.section-pad {
+  padding-block: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.container-x {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2rem);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-blue);
+}
+
+.eyebrow-on-dark {
+  color: var(--brand-blue-light);
+}
+
+/* Scroll fade-in (Intersection Observer toggles .is-visible) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Focus-visible ring */
+:focus-visible {
+  outline: 2px solid var(--brand-blue);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: var(--brand-blue);
+  color: var(--text-on-dark);
+}
+.btn-primary:hover { background: color-mix(in srgb, var(--brand-blue) 88%, black); }
+
+.btn-outline-on-dark {
+  background: transparent;
+  color: var(--text-on-dark);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn-outline-on-dark:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-white {
+  background: var(--bg-white);
+  color: var(--text-primary);
+}
+.btn-white:hover { background: color-mix(in srgb, var(--bg-white) 92%, black); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--brand-blue);
+  padding-inline: 0;
+}
+.btn-ghost:hover { color: var(--brand-navy); }
+
+/* Cards */
+.card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+.card-dark {
+  background: var(--brand-dark);
+  color: var(--text-on-dark);
+  border-color: var(--border-dark);
+}
+.card-dark p { color: var(--text-on-dark-muted); }
+.card-dark h3 { color: var(--text-on-dark); }
+
+/* Rounded pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .fade-in.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .card { transition: none; }
+  .card:hover { transform: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
