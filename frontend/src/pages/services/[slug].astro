@@ -34,6 +34,10 @@ const related = relatedSlugs
   title={`${service.data.title} — TETRASOFT`}
   description={service.data.shortDescription}
   overHero={true}
+  breadcrumbs={[
+    { name: 'Услуги', url: '/services' },
+    { name: service.data.title, url: `/services/${service.data.slug}` },
+  ]}
 >
   <PageHero
     eyebrow="УСЛУГА"

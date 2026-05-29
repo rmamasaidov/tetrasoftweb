@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Страница не найдена — TETRASOFT"
+  description="Запрошенная страница не найдена."
+  overHero={true}
+>
+  <section class="nf">
+    <div class="nf__bg" aria-hidden="true"></div>
+    <div class="container-x nf__inner">
+      <p class="nf__code">404</p>
+      <h1 class="nf__title">Страница не найдена</h1>
+      <p class="nf__sub">Возможно, она была перемещена. Перейдите на главную или просмотрите портфолио.</p>
+      <div class="nf__cta">
+        <a href="/" class="btn btn-primary">На главную</a>
+        <a href="/portfolio" class="btn btn-outline-on-dark">Портфолио</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    position: relative;
+    isolation: isolate;
+    color: var(--text-on-dark);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-top: -72px;
+    padding-top: 72px;
+  }
+  .nf__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 70% 60% at 30% 40%, rgba(25, 113, 194, 0.30) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 80% 70%, rgba(28, 46, 111, 0.55) 0%, transparent 60%),
+      linear-gradient(160deg, #0A1330 0%, #060B22 70%, #0A1330 100%);
+  }
+  .nf__inner { max-width: 640px; }
+  .nf__code {
+    font-size: clamp(4rem, 12vw, 8rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--brand-blue-light);
+    opacity: 0.6;
+    letter-spacing: -0.04em;
+    margin: 0;
+  }
+  .nf__title { color: var(--text-on-dark); margin-top: 1rem; }
+  .nf__sub { color: var(--text-on-dark-muted); margin-top: 1rem; }
+  .nf__cta { margin-top: 2rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+</style>

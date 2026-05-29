@@ -16,6 +16,18 @@ export async function getStaticPaths() {
 const { project } = Astro.props;
 const { Content } = await render(project);
 
+const projectJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": project.data.title,
+  "description": project.data.summary,
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "creator": { "@type": "Organization", "name": "TETRASOFT" },
+  "datePublished": project.data.year.match(/^\d{4}/)?.[0] ?? project.data.year,
+  ...(project.data.award ? { "award": project.data.award } : {}),
+};
+
 const all = await getCollection('portfolio');
 const sameSector = all
   .filter((p) => p.data.sector === project.data.sector && p.data.slug !== project.data.slug)
@@ -34,6 +46,11 @@ const related = sameSector.length >= 3
   title={`${project.data.title} — TETRASOFT`}
   description={project.data.summary}
   overHero={true}
+  breadcrumbs={[
+    { name: 'Портфолио', url: '/portfolio' },
+    { name: project.data.title, url: `/portfolio/${project.data.slug}` },
+  ]}
+  jsonLd={[projectJsonLd]}
 >
   <PageHero
     eyebrow={SECTOR_LABELS[project.data.sector]}

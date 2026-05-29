@@ -12,6 +12,10 @@ interface Props {
   canonical?: string;
   /** Optional og:image (absolute URL preferred). */
   ogImage?: string;
+  /** Breadcrumb trail (omit Home — it's prepended automatically). */
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  /** Extra JSON-LD blocks to emit (e.g. SoftwareApplication on portfolio detail). */
+  jsonLd?: Array<Record<string, unknown>>;
   lang?: string;
 }
 
@@ -21,6 +25,8 @@ const {
   overHero = false,
   canonical,
   ogImage,
+  breadcrumbs,
+  jsonLd = [],
   lang = 'ru',
 } = Astro.props;
 
@@ -49,6 +55,22 @@ const orgJsonLd = {
   "areaServed": "UZ",
   "description": "Разработка корпоративных и государственных информационных систем в Узбекистане. Резидент IT Park."
 };
+
+const breadcrumbsJsonLd = breadcrumbs && breadcrumbs.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl + '/' },
+        ...breadcrumbs.map((b, i) => ({
+          "@type": "ListItem",
+          "position": i + 2,
+          "name": b.name,
+          "item": b.url.startsWith('http') ? b.url : siteUrl + b.url,
+        })),
+      ],
+    }
+  : null;
 ---
 
 <!doctype html>
@@ -81,6 +103,12 @@ const orgJsonLd = {
     <meta name="theme-color" content="#0A1330" />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    {breadcrumbsJsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbsJsonLd)} />
+    )}
+    {jsonLd.map((block) => (
+      <script type="application/ld+json" set:html={JSON.stringify(block)} />
+    ))}
   </head>
 
   <body>
