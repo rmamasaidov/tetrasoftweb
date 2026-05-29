@@ -1,0 +1,53 @@
+---
+import SectionEyebrow from './SectionEyebrow.astro';
+interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+}
+const { eyebrow, title, subtitle } = Astro.props;
+---
+
+<section class="page-hero" aria-labelledby="page-hero-title">
+  <div class="page-hero__bg" aria-hidden="true"></div>
+  <div class="container-x page-hero__inner">
+    <SectionEyebrow text={eyebrow} onDark={true} />
+    <h1 id="page-hero-title" class="page-hero__title">{title}</h1>
+    {subtitle && <p class="page-hero__sub">{subtitle}</p>}
+    <slot />
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    isolation: isolate;
+    color: var(--text-on-dark);
+    overflow: hidden;
+    margin-top: -72px;
+    padding-top: calc(72px + clamp(3.5rem, 6vw, 5.5rem));
+    padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+  }
+  .page-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 70% 60% at 20% 30%, rgba(25, 113, 194, 0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 85% 80%, rgba(28, 46, 111, 0.50) 0%, transparent 60%),
+      linear-gradient(160deg, #0A1330 0%, #060B22 70%, #0A1330 100%);
+  }
+  .page-hero__inner { max-width: 880px; }
+  .page-hero__title {
+    color: var(--text-on-dark);
+    margin-top: 1.25rem;
+    font-size: clamp(1.875rem, 2.8vw + 1rem, 2.875rem);
+    line-height: 1.12;
+  }
+  .page-hero__sub {
+    color: var(--text-on-dark-muted);
+    margin-top: 1.25rem;
+    font-size: clamp(1rem, 0.3vw + 0.95rem, 1.125rem);
+    max-width: 60ch;
+  }
+</style>

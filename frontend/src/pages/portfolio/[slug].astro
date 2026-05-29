@@ -1,0 +1,197 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionEyebrow from '../../components/SectionEyebrow.astro';
+import PortfolioCard from '../../components/PortfolioCard.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import Icon from '../../components/Icon.astro';
+import { SECTOR_LABELS } from '../../lib/sectors';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('portfolio');
+  return projects.map((p) => ({ params: { slug: p.data.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const all = await getCollection('portfolio');
+const sameSector = all
+  .filter((p) => p.data.sector === project.data.sector && p.data.slug !== project.data.slug)
+  .slice(0, 3);
+const related = sameSector.length >= 3
+  ? sameSector
+  : [
+      ...sameSector,
+      ...all
+        .filter((p) => p.data.featured && p.data.slug !== project.data.slug && !sameSector.includes(p))
+        .slice(0, 3 - sameSector.length),
+    ];
+---
+
+<BaseLayout
+  title={`${project.data.title} — TETRASOFT`}
+  description={project.data.summary}
+  overHero={true}
+>
+  <PageHero
+    eyebrow={SECTOR_LABELS[project.data.sector]}
+    title={project.data.title}
+    subtitle={project.data.summary}
+  >
+    <ul class="pf-meta">
+      <li class="pf-meta__item">
+        <span class="pf-meta__label">Заказчик</span>
+        <span class="pf-meta__value">{project.data.client}</span>
+      </li>
+      <li class="pf-meta__item">
+        <span class="pf-meta__label">Год</span>
+        <span class="pf-meta__value">{project.data.year}</span>
+      </li>
+      <li class="pf-meta__item">
+        <span class="pf-meta__label">Сертификат</span>
+        <span class="pf-meta__value pf-meta__value--mono">{project.data.dgu}</span>
+      </li>
+      {project.data.award && (
+        <li class="pf-meta__item pf-meta__item--award">
+          <span class="pf-meta__award-tag">
+            <Icon name="check" size={14} /> Награда
+          </span>
+          <span class="pf-meta__value">{project.data.award}</span>
+        </li>
+      )}
+    </ul>
+  </PageHero>
+
+  <article class="pf-article section-pad">
+    <div class="container-x pf-article__inner fade-in">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="related section-pad" aria-labelledby="related-title">
+      <div class="container-x">
+        <header class="related__header fade-in">
+          <SectionEyebrow text="ПОРТФОЛИО" />
+          <h2 id="related-title">Другие проекты</h2>
+        </header>
+        <ul class="related__grid fade-in">
+          {related.map((p) => (
+            <li>
+              <PortfolioCard
+                slug={p.data.slug}
+                title={p.data.title}
+                client={p.data.client}
+                year={p.data.year}
+                summary={p.data.summary}
+                sector={p.data.sector}
+                award={p.data.award}
+              />
+            </li>
+          ))}
+        </ul>
+        <div class="related__cta fade-in">
+          <a href="/portfolio" class="btn btn-ghost">Все проекты →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <FinalCTA
+    title="Похожая задача?"
+    text="Расскажите о вашей ситуации — обсудим возможности."
+  />
+</BaseLayout>
+
+<style is:global>
+  .pf-article__inner {
+    max-width: 760px;
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .pf-article__inner h2 {
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  .pf-article__inner h2:first-child { margin-top: 0; }
+  .pf-article__inner h3 {
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+  .pf-article__inner p { margin: 0 0 1.125rem; }
+  .pf-article__inner ul,
+  .pf-article__inner ol {
+    margin: 0 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+  .pf-article__inner li { margin-bottom: 0.5rem; }
+  .pf-article__inner strong { color: var(--text-primary); }
+</style>
+
+<style>
+  .pf-meta {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+  }
+  .pf-meta__item { display: flex; flex-direction: column; gap: 0.25rem; }
+  .pf-meta__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-muted);
+  }
+  .pf-meta__value { color: var(--text-on-dark); font-size: 0.9375rem; line-height: 1.4; }
+  .pf-meta__value--mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+    color: var(--brand-blue-light);
+  }
+  .pf-meta__item--award { grid-column: 1 / -1; }
+  .pf-meta__award-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    align-self: flex-start;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brand-dark);
+    background: var(--brand-accent);
+    padding: 0.3125rem 0.625rem;
+    border-radius: 9999px;
+  }
+
+  .pf-article { background: var(--bg-white); }
+  .related { background: var(--bg-light); }
+  .related__header { max-width: 760px; margin-bottom: 2rem; }
+  .related__header h2 { margin-top: 0.75rem; }
+  .related__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .related__cta { margin-top: 2rem; text-align: center; }
+
+  @media (max-width: 960px) {
+    .related__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .related__grid { grid-template-columns: 1fr; }
+  }
+</style>

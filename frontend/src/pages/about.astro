@@ -1,0 +1,276 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+
+const history = [
+  'ООО «TETRASOFT» основано 28 ноября 1997 года. Компания одной из первых в Узбекистане начала специализироваться на разработке прикладного программного обеспечения для корпоративных и государственных задач.',
+  'Первое десятилетие — это локальные информационные системы для бизнеса: бухгалтерия, учёт, специализированные отраслевые решения. К концу 2000-х компания накопила достаточно опыта, чтобы выйти на государственный рынок.',
+  'В 2010 году TETRASOFT начала сотрудничество с Государственным таможенным комитетом — было разработано сразу четыре информационные системы, зарегистрированные в Государственном реестре. Эта работа стала точкой опоры на следующие 15+ лет: ГТК остаётся ключевым клиентом компании.',
+  'В декабре 2019 года TETRASOFT получила статус резидента IT Park Узбекистана. С 2020 года расширила направления: медицинские информационные системы, образовательные платформы, IoT-решения для промышленности и АПК.',
+];
+
+const achievements = [
+  {
+    tag: 'НАГРАДА',
+    title: 'Диплом 1-й степени «Yangi Intellekt 2013»',
+    text: 'В номинации «Лучший программный продукт» за систему учёта таможенных правонарушений (DGU 02104) — национальный конкурс инноваций.',
+  },
+  {
+    tag: 'ПАТЕНТ',
+    title: 'Международный сертификат INTEROCO',
+    text: 'Международный сертификат авторского права EC-01-001628 (27.03.2018) — защита по Бернской конвенции в 167 странах. Научно-исследовательская работа основателя.',
+  },
+  {
+    tag: 'СЕРТИФИКАЦИЯ',
+    title: 'Сертификат Узстандарта № 5907/04',
+    text: 'Сертификат национальной системы стандартизации (2014).',
+  },
+  {
+    tag: 'СТАТУС',
+    title: 'Резидент IT Park Узбекистана',
+    text: 'С 03.12.2019. Освобождение от налога на прибыль и НДС, передаваемое клиенту в цене проекта.',
+  },
+];
+
+const dgus: Array<{ n: number; dgu: string; date: string; name: string }> = [
+  { n: 1, dgu: '02102', date: '17.12.2010', name: 'АИС «Таможенный склад»' },
+  { n: 2, dgu: '02103', date: '17.12.2010', name: 'Бухгалтерская система «TS-Бухгалтерия+Маош»' },
+  { n: 3, dgu: '02104', date: '17.12.2010', name: 'АИС «Учёт нарушений таможенного законодательства»' },
+  { n: 4, dgu: '02105', date: '17.12.2010', name: 'АИС «Таможенные платежи»' },
+  { n: 5, dgu: '03366', date: '28.10.2015', name: 'АИС «Управление персоналом»' },
+  { n: 6, dgu: '03367', date: '28.10.2015', name: 'Комплексная АИС «Управление организацией»' },
+  { n: 7, dgu: '03368', date: '28.10.2015', name: 'АИС «Контроль обращений граждан»' },
+  { n: 8, dgu: '03371', date: '29.10.2015', name: 'АИС «Учёт производственных процессов»' },
+  { n: 9, dgu: '06321', date: '07.05.2019', name: 'АИС «Управление персоналом в АПК»' },
+  { n: 10, dgu: '06322', date: '07.05.2019', name: 'АИС «Учёт правонарушений в АПК»' },
+  { n: 11, dgu: '06323', date: '07.05.2019', name: 'АИС «Учёт заготовки сельхозкультур» (TS_Scale)' },
+  { n: 12, dgu: '06324', date: '07.05.2019', name: 'АИС «Мониторинг с/х техники»' },
+  { n: 13, dgu: '09012', date: '14.09.2020', name: 'Комплексная АИС для медучреждений' },
+  { n: 14, dgu: '09013', date: '14.09.2020', name: 'АИС «Бронирование коек/мест»' },
+  { n: 15, dgu: '12811', date: '22.10.2021', name: 'Платформа Learning Library' },
+  { n: 16, dgu: '12813', date: '22.10.2021', name: 'Полиграфический калькулятор' },
+  { n: 17, dgu: '12817', date: '25.10.2021', name: 'Mobile Assessment' },
+];
+
+const details: Array<[string, string]> = [
+  ['Полное наименование', 'Общество с ограниченной ответственностью «TETRASOFT»'],
+  ['ИНН', '202430867'],
+  ['Дата регистрации', '28 ноября 1997 года'],
+  ['Юридический адрес', '100098, г. Ташкент, Алмазарский район, Каракамыш-1/3, 35, оф. 5'],
+  ['ОКЭД', '62.01 — Производство компьютерного программного обеспечения'],
+  ['Статус', 'Резидент IT Park Узбекистана с 03.12.2019'],
+  ['Категория', 'Микрокомпания'],
+  ['Телефон', '+998 71 240-78-05'],
+  ['Email', 'info@tetrasoft.uz'],
+];
+---
+
+<BaseLayout
+  title="О компании — TETRASOFT"
+  description="TETRASOFT — IT-компания с 28-летней историей. Резидент IT Park. 17+ зарегистрированных программных продуктов, международный патент, диплом «Yangi Intellekt 2013»."
+  overHero={true}
+>
+  <PageHero
+    eyebrow="О КОМПАНИИ"
+    title="28 лет создания информационных систем"
+    subtitle="От локальных приложений 1997 года до комплексных систем для государственных органов Узбекистана."
+  />
+
+  <section class="about-section section-pad" aria-labelledby="history-title">
+    <div class="container-x about-section__inner fade-in">
+      <h2 id="history-title">История</h2>
+      <div class="prose">
+        {history.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-section--alt section-pad" aria-labelledby="ach-title">
+    <div class="container-x">
+      <header class="about-section__header fade-in">
+        <SectionEyebrow text="СЕРТИФИКАТЫ · НАГРАДЫ · ПАТЕНТЫ" />
+        <h2 id="ach-title">Достижения и признание</h2>
+      </header>
+      <ul class="ach-grid fade-in">
+        {achievements.map((a) => (
+          <li class="ach-card">
+            <span class="ach-card__tag">{a.tag}</span>
+            <h3 class="ach-card__title">{a.title}</h3>
+            <p class="ach-card__text">{a.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="about-section section-pad" aria-labelledby="dgu-title">
+    <div class="container-x">
+      <header class="about-section__header fade-in">
+        <h2 id="dgu-title">Зарегистрированные программные продукты</h2>
+        <p class="about-section__sub">
+          17+ программных продуктов зарегистрированы в Государственном реестре программ для ЭВМ Республики Узбекистан
+        </p>
+      </header>
+      <div class="dgu-table fade-in" role="table" aria-label="DGU-сертификаты">
+        <div class="dgu-table__head" role="row">
+          <span role="columnheader">№</span>
+          <span role="columnheader">DGU</span>
+          <span role="columnheader">Дата</span>
+          <span role="columnheader">Название</span>
+        </div>
+        {dgus.map((r) => (
+          <div class="dgu-table__row" role="row">
+            <span role="cell" class="dgu-table__n">{r.n}</span>
+            <span role="cell" class="dgu-table__dgu">DGU {r.dgu}</span>
+            <span role="cell" class="dgu-table__date">{r.date}</span>
+            <span role="cell" class="dgu-table__name">{r.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="about-section about-section--alt section-pad" aria-labelledby="details-title">
+    <div class="container-x">
+      <header class="about-section__header fade-in">
+        <h2 id="details-title">Реквизиты</h2>
+      </header>
+      <dl class="details fade-in">
+        {details.map(([k, v]) => (
+          <div class="details__row">
+            <dt>{k}</dt>
+            <dd>{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <FinalCTA
+    title="Готовы обсудить ваш проект?"
+    text="28 лет опыта в корпоративной и государственной разработке. Расскажите о задаче — предложим решение."
+  />
+</BaseLayout>
+
+<style>
+  .about-section { background: var(--bg-white); }
+  .about-section--alt { background: var(--bg-light); }
+  .about-section__inner { max-width: 760px; }
+  .about-section__header { max-width: 760px; margin-bottom: 2rem; }
+  .about-section__sub { color: var(--text-secondary); margin-top: 0.75rem; max-width: 60ch; }
+
+  .prose {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .ach-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .ach-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .ach-card__tag {
+    align-self: flex-start;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    background: rgba(25, 113, 194, 0.10);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+  .ach-card__title { font-size: 1rem; margin: 0.25rem 0 0; }
+  .ach-card__text { font-size: 0.875rem; color: var(--text-secondary); margin: 0; line-height: 1.55; }
+
+  /* DGU "table" — CSS grid for responsive layout */
+  .dgu-table {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .dgu-table__head,
+  .dgu-table__row {
+    display: grid;
+    grid-template-columns: 48px 100px 110px 1fr;
+    gap: 1rem;
+    padding: 0.875rem 1.25rem;
+    align-items: baseline;
+    font-size: 0.9375rem;
+  }
+  .dgu-table__head {
+    background: var(--bg-light);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .dgu-table__row + .dgu-table__row,
+  .dgu-table__head + .dgu-table__row {
+    border-top: 1px solid var(--border-light);
+  }
+  .dgu-table__n { color: var(--text-secondary); }
+  .dgu-table__dgu,
+  .dgu-table__date {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+    color: var(--brand-navy);
+  }
+  .dgu-table__name { color: var(--text-primary); }
+
+  .details {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+  .details__row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+    padding: 0.875rem 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.9375rem;
+  }
+  .details__row:last-child { border-bottom: 0; }
+  .details dt { color: var(--text-secondary); margin: 0; }
+  .details dd { color: var(--text-primary); margin: 0; }
+
+  @media (max-width: 880px) {
+    .ach-grid { grid-template-columns: repeat(2, 1fr); }
+    .dgu-table__head,
+    .dgu-table__row {
+      grid-template-columns: 36px 90px 1fr;
+      gap: 0.625rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+    }
+    .dgu-table__date { display: none; }
+    .details__row { grid-template-columns: 1fr; gap: 0.25rem; padding: 0.875rem 1.25rem; }
+  }
+  @media (max-width: 540px) {
+    .ach-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  text?: string;
+  buttonLabel?: string;
+  buttonHref?: string;
+}
+const {
+  title,
+  text,
+  buttonLabel = 'Обсудить проект',
+  buttonHref = '/#contact',
+} = Astro.props;
+---
+
+<section class="final-cta section-pad" aria-labelledby="final-cta-title">
+  <div class="final-cta__glow" aria-hidden="true"></div>
+  <div class="container-x final-cta__inner fade-in">
+    <h2 id="final-cta-title" class="final-cta__h2">{title}</h2>
+    {text && <p class="final-cta__text">{text}</p>}
+    <a href={buttonHref} class="btn btn-primary final-cta__btn">{buttonLabel}</a>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    position: relative;
+    isolation: isolate;
+    background: var(--brand-dark);
+    color: var(--text-on-dark);
+    text-align: center;
+    overflow: hidden;
+  }
+  .final-cta__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(25, 113, 194, 0.28) 0%, transparent 65%);
+  }
+  .final-cta__inner { max-width: 720px; }
+  .final-cta__h2 {
+    color: var(--text-on-dark);
+    font-size: clamp(1.5rem, 2vw + 1rem, 2.25rem);
+  }
+  .final-cta__text {
+    color: var(--text-on-dark-muted);
+    margin-top: 1rem;
+    font-size: 1.0625rem;
+  }
+  .final-cta__btn { margin-top: 2rem; }
+</style>

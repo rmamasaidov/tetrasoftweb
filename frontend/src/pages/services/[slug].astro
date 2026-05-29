@@ -1,0 +1,157 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionEyebrow from '../../components/SectionEyebrow.astro';
+import PortfolioCard from '../../components/PortfolioCard.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((s) => ({ params: { slug: s.data.slug }, props: { service: s } }));
+}
+
+const { service } = Astro.props;
+const { Content } = await render(service);
+
+// Hand-curated related projects per service slug — keeps the link relevant.
+const RELATED: Record<string, string[]> = {
+  'gosudarstvennye-resheniya': ['gtk-narusheniya', 'gtk-platezhi', 'obrashcheniya-grazhdan'],
+  'korporativnaya-razrabotka': ['erp-system', 'hr-system', 'ts-buxgalter'],
+  'ai-integraciya': ['gtk-narusheniya', 'mobile-assessment', 'learning-library'],
+  'modernizaciya-legacy': ['gtk-sklad', 'ts-buxgalter', 'proizvodstvo'],
+  'tehnicheskaya-podderzhka': ['gtk-platezhi', 'erp-system', 'med-ais'],
+};
+
+const allPortfolio = await getCollection('portfolio');
+const relatedSlugs = RELATED[service.data.slug] ?? [];
+const related = relatedSlugs
+  .map((s) => allPortfolio.find((p) => p.data.slug === s))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+---
+
+<BaseLayout
+  title={`${service.data.title} — TETRASOFT`}
+  description={service.data.shortDescription}
+  overHero={true}
+>
+  <PageHero
+    eyebrow="УСЛУГА"
+    title={service.data.title}
+    subtitle={service.data.shortDescription}
+  />
+
+  <article class="srv-article section-pad">
+    <div class="container-x srv-article__inner fade-in">
+      <Content />
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="related section-pad" aria-labelledby="related-title">
+      <div class="container-x">
+        <header class="related__header fade-in">
+          <SectionEyebrow text="ПОРТФОЛИО" />
+          <h2 id="related-title">Проекты по этому направлению</h2>
+        </header>
+        <ul class="related__grid fade-in">
+          {related.map((p) => (
+            <li>
+              <PortfolioCard
+                slug={p.data.slug}
+                title={p.data.title}
+                client={p.data.client}
+                year={p.data.year}
+                summary={p.data.summary}
+                sector={p.data.sector}
+                award={p.data.award}
+              />
+            </li>
+          ))}
+        </ul>
+        <div class="related__cta fade-in">
+          <a href="/portfolio" class="btn btn-ghost">Все проекты →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <FinalCTA
+    title="Нужна эта услуга?"
+    text="Опишите задачу — обсудим, как мы можем помочь."
+  />
+</BaseLayout>
+
+<style is:global>
+  /* Markdown body styling for service detail pages.
+     :global because Astro <Content /> renders unscoped markup. */
+  .srv-article__inner {
+    max-width: 760px;
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .srv-article__inner h1 { display: none; } /* H1 already in PageHero */
+  .srv-article__inner h2 {
+    color: var(--text-primary);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+  }
+  .srv-article__inner h3 {
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+  .srv-article__inner p { margin: 0 0 1.125rem; }
+  .srv-article__inner ul,
+  .srv-article__inner ol {
+    margin: 0 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+  .srv-article__inner li { margin-bottom: 0.5rem; }
+  .srv-article__inner a {
+    color: var(--brand-blue);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .srv-article__inner strong { color: var(--text-primary); }
+  .srv-article__inner blockquote {
+    border-left: 3px solid var(--brand-blue);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--text-primary);
+  }
+  .srv-article__inner code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.9375em;
+    background: var(--bg-light);
+    padding: 0.125em 0.375em;
+    border-radius: var(--radius-sm);
+  }
+</style>
+
+<style>
+  .srv-article { background: var(--bg-white); }
+  .related { background: var(--bg-light); }
+  .related__header { max-width: 760px; margin-bottom: 2rem; }
+  .related__header h2 { margin-top: 0.75rem; }
+  .related__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .related__cta { margin-top: 2rem; text-align: center; }
+
+  @media (max-width: 960px) {
+    .related__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .related__grid { grid-template-columns: 1fr; }
+  }
+</style>

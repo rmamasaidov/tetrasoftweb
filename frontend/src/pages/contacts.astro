@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+
+const channels = [
+  {
+    icon: 'phone',
+    title: 'Телефон',
+    value: '+998 71 240-78-05',
+    extra: '+998 98 301-51-64 (мобильный)',
+    note: 'Пн–Пт, 9:00–18:00',
+    href: 'tel:+998712407805',
+  },
+  {
+    icon: 'mail',
+    title: 'Email',
+    value: 'info@tetrasoft.uz',
+    extra: '',
+    note: 'Отвечаем в течение одного рабочего дня',
+    href: 'mailto:info@tetrasoft.uz',
+  },
+  {
+    icon: 'map-pin',
+    title: 'Офис',
+    value: '100098, г. Ташкент, Алмазарский район, Каракамыш-1/3, 35, оф. 5',
+    extra: '',
+    note: 'Визиты — по предварительной договорённости',
+    href: '',
+  },
+];
+
+const leftDetails = [
+  ['ООО', '«TETRASOFT»'],
+  ['ИНН', '202430867'],
+  ['ОКЭД', '62.01'],
+  ['Дата регистрации', '28.11.1997'],
+];
+const rightDetails = [
+  ['Юр. адрес', '100098, г. Ташкент, Алмазарский район, Каракамыш-1/3, 35, оф. 5'],
+  ['Резидент IT Park', 'с 03.12.2019'],
+  ['Категория', 'Микрокомпания'],
+];
+
+// Yandex Maps embed: search for the office address. No API key needed for the
+// public iframe; uses Yandex's standard /map-widget/v1 endpoint.
+const mapSearch = 'Ташкент, Каракамыш-1/3, 35';
+const mapEmbed = `https://yandex.com/map-widget/v1/?text=${encodeURIComponent(mapSearch)}&z=15`;
+---
+
+<BaseLayout
+  title="Контакты — TETRASOFT"
+  description="Свяжитесь с TETRASOFT для обсуждения вашего проекта. Адрес: Ташкент, Каракамыш. Телефон: +998 71 240-78-05."
+  overHero={true}
+>
+  <PageHero
+    eyebrow="КОНТАКТЫ"
+    title="Свяжитесь с нами"
+    subtitle="Опишите задачу — свяжемся в течение одного рабочего дня."
+  />
+
+  <section class="ch section-pad" aria-labelledby="channels-title">
+    <div class="container-x">
+      <h2 id="channels-title" class="sr-only">Способы связи</h2>
+      <ul class="ch__grid fade-in">
+        {channels.map((c) => (
+          <li class="ch__card">
+            <div class="ch__icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                {c.icon === 'phone' && <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2" />}
+                {c.icon === 'mail' && <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>}
+                {c.icon === 'map-pin' && <><path d="M12 21s-7-7.5-7-12a7 7 0 1114 0c0 4.5-7 12-7 12z" /><circle cx="12" cy="9" r="2.5" /></>}
+              </svg>
+            </div>
+            <h3 class="ch__title">{c.title}</h3>
+            {c.href
+              ? <a href={c.href} class="ch__value">{c.value}</a>
+              : <span class="ch__value">{c.value}</span>
+            }
+            {c.extra && <p class="ch__extra">{c.extra}</p>}
+            <p class="ch__note">{c.note}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="map" aria-label="Карта офиса">
+    <iframe
+      src={mapEmbed}
+      title="Расположение офиса TETRASOFT"
+      loading="lazy"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </section>
+
+  <section class="contact-form-wrap" aria-labelledby="contact-form-title">
+    <div class="contact-form-wrap__glow" aria-hidden="true"></div>
+    <div class="container-x contact-form-wrap__inner">
+      <div class="contact-form-wrap__copy fade-in">
+        <h2 id="contact-form-title">Расскажите о вашем проекте</h2>
+        <p>Чем точнее опишете задачу — тем точнее будет наш ответ.</p>
+      </div>
+      <div class="contact-form-wrap__form fade-in" id="contact">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+
+  <section class="details section-pad" aria-labelledby="details-title">
+    <div class="container-x">
+      <header class="details__header fade-in">
+        <h2 id="details-title">Реквизиты для договоров</h2>
+      </header>
+      <div class="details__grid fade-in">
+        <dl class="details__col">
+          {leftDetails.map(([k, v]) => (
+            <div class="details__row"><dt>{k}</dt><dd>{v}</dd></div>
+          ))}
+        </dl>
+        <dl class="details__col">
+          {rightDetails.map(([k, v]) => (
+            <div class="details__row"><dt>{k}</dt><dd>{v}</dd></div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <FinalCTA
+    title="Готовы начать?"
+    text="Опишите задачу — обсудим, как мы можем помочь."
+  />
+</BaseLayout>
+
+<style>
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  }
+
+  .ch { background: var(--bg-white); }
+  .ch__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .ch__card {
+    background: var(--bg-white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .ch__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: rgba(25, 113, 194, 0.10);
+    color: var(--brand-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+  .ch__title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-secondary); margin: 0; }
+  .ch__value { font-size: 1.125rem; color: var(--text-primary); font-weight: 500; margin: 0.125rem 0 0; }
+  a.ch__value { color: var(--text-primary); transition: color 0.2s ease; }
+  a.ch__value:hover { color: var(--brand-blue); }
+  .ch__extra { font-size: 0.9375rem; color: var(--text-secondary); margin: 0; }
+  .ch__note { font-size: 0.8125rem; color: var(--text-secondary); margin: 0.5rem 0 0; }
+
+  .map { background: var(--bg-light); }
+  .map iframe {
+    display: block;
+    width: 100%;
+    height: 400px;
+    border: 0;
+  }
+
+  .contact-form-wrap {
+    position: relative;
+    isolation: isolate;
+    background: var(--brand-dark);
+    color: var(--text-on-dark);
+    padding-block: clamp(3.5rem, 6vw, 5.5rem);
+    overflow: hidden;
+  }
+  .contact-form-wrap__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 55% at 80% 30%, rgba(25, 113, 194, 0.32) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 15% 80%, rgba(93, 202, 165, 0.16) 0%, transparent 60%);
+  }
+  .contact-form-wrap__inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .contact-form-wrap__copy { position: sticky; top: 96px; }
+  .contact-form-wrap__copy h2 {
+    color: var(--text-on-dark);
+    font-size: clamp(1.5rem, 1.6vw + 1rem, 2.25rem);
+  }
+  .contact-form-wrap__copy p { color: var(--text-on-dark-muted); margin-top: 1rem; }
+
+  .details { background: var(--bg-white); }
+  .details__header { margin-bottom: 1.5rem; }
+  .details__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .details__col { margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .details__row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1rem;
+    font-size: 0.9375rem;
+    padding-block: 0.625rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .details__row:last-child { border-bottom: 0; }
+  .details dt { color: var(--text-secondary); margin: 0; }
+  .details dd { color: var(--text-primary); margin: 0; font-weight: 500; }
+
+  @media (max-width: 880px) {
+    .ch__grid { grid-template-columns: 1fr; }
+    .contact-form-wrap__inner { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-form-wrap__copy { position: static; }
+    .details__grid { grid-template-columns: 1fr; gap: 1rem; }
+    .details__row { grid-template-columns: 1fr; gap: 0.25rem; }
+  }
+</style>
