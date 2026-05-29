@@ -1,0 +1,265 @@
+---
+/* Contact form. POSTs JSON to /api/lead.
+   Backend schema (backend/src/lead.ts): { name, contact, message?, source? } */
+---
+
+<form id="contact-form" class="cform" novalidate>
+  <div class="cform__row">
+    <label class="cform__field">
+      <span class="cform__label">Имя и фамилия <span class="cform__req" aria-hidden="true">*</span></span>
+      <input type="text" name="fullName" required maxlength="100" autocomplete="name" />
+    </label>
+
+    <label class="cform__field">
+      <span class="cform__label">Название организации <span class="cform__req" aria-hidden="true">*</span></span>
+      <input type="text" name="organization" required maxlength="120" autocomplete="organization" />
+    </label>
+  </div>
+
+  <div class="cform__row">
+    <label class="cform__field">
+      <span class="cform__label">Должность</span>
+      <input type="text" name="position" maxlength="80" autocomplete="organization-title" />
+    </label>
+
+    <label class="cform__field">
+      <span class="cform__label">Телефон или Telegram <span class="cform__req" aria-hidden="true">*</span></span>
+      <input type="text" name="phone" required maxlength="80" autocomplete="tel" inputmode="tel" />
+    </label>
+  </div>
+
+  <div class="cform__row">
+    <label class="cform__field">
+      <span class="cform__label">Email</span>
+      <input type="email" name="email" maxlength="120" autocomplete="email" />
+    </label>
+
+    <label class="cform__field">
+      <span class="cform__label">Тип проекта <span class="cform__req" aria-hidden="true">*</span></span>
+      <select name="projectType" required>
+        <option value="">— выберите —</option>
+        <option>Корпоративная система</option>
+        <option>Государственный проект</option>
+        <option>Модернизация</option>
+        <option>AI-интеграция</option>
+        <option>Другое</option>
+      </select>
+    </label>
+  </div>
+
+  <label class="cform__field">
+    <span class="cform__label">Краткое описание задачи <span class="cform__req" aria-hidden="true">*</span></span>
+    <textarea name="description" required maxlength="1000" rows="4"></textarea>
+  </label>
+
+  <div class="cform__actions">
+    <button type="submit" class="btn btn-white cform__submit">Отправить заявку</button>
+    <p class="cform__direct">
+      Или напишите напрямую —
+      <a href="mailto:info@tetrasoft.uz">info@tetrasoft.uz</a> ·
+      <a href="tel:+998712407805">+998 71 240-78-05</a>
+    </p>
+  </div>
+
+  <p class="cform__status" id="cform-status" role="status" aria-live="polite"></p>
+</form>
+
+<div id="cform-success" class="cform__success" hidden>
+  <p>Заявка отправлена. Мы свяжемся в течение одного рабочего дня.</p>
+</div>
+
+<style>
+  .cform {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cform__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .cform__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4375rem;
+  }
+
+  .cform__label {
+    font-size: 0.8125rem;
+    color: var(--text-on-dark-muted);
+    font-weight: 500;
+  }
+
+  .cform__req { color: var(--brand-accent); }
+
+  .cform input,
+  .cform select,
+  .cform textarea {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-md);
+    color: var(--text-on-dark);
+    padding: 0.75rem 0.875rem;
+    font: inherit;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .cform select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.6) 50%),
+      linear-gradient(135deg, rgba(255,255,255,0.6) 50%, transparent 50%);
+    background-position:
+      calc(100% - 16px) 50%,
+      calc(100% - 11px) 50%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    padding-right: 2rem;
+  }
+
+  .cform select option { color: var(--text-primary); }
+
+  .cform textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+  }
+
+  .cform input:focus,
+  .cform select:focus,
+  .cform textarea:focus {
+    outline: none;
+    border-color: var(--brand-blue-light);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .cform input::placeholder,
+  .cform textarea::placeholder { color: rgba(255, 255, 255, 0.35); }
+
+  .cform__actions {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .cform__submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .cform__direct {
+    color: var(--text-on-dark-muted);
+    font-size: 0.8125rem;
+    margin: 0;
+  }
+  .cform__direct a {
+    color: var(--brand-blue-light);
+    transition: color 0.2s ease;
+  }
+  .cform__direct a:hover { color: var(--text-on-dark); }
+
+  .cform__status {
+    min-height: 1.25rem;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+  .cform__status.is-error { color: #FCA5A5; }
+
+  .cform__success {
+    background: rgba(93, 202, 165, 0.08);
+    border: 1px solid rgba(93, 202, 165, 0.3);
+    color: var(--text-on-dark);
+    padding: 1.75rem;
+    border-radius: var(--radius-lg);
+    font-size: 1.0625rem;
+  }
+  .cform__success p { margin: 0; color: var(--text-on-dark); }
+
+  @media (max-width: 640px) {
+    .cform__row { grid-template-columns: 1fr; }
+    .cform__actions { flex-direction: column; align-items: stretch; }
+    .cform__submit { width: 100%; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('cform-status');
+  const success = document.getElementById('cform-success');
+  if (form && status && success) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.classList.remove('is-error');
+      status.textContent = '';
+
+      const fd = new FormData(form);
+      const get = (k: string) => (fd.get(k) ?? '').toString().trim();
+
+      const name = get('fullName');
+      const phone = get('phone');
+      const organization = get('organization');
+      const projectType = get('projectType');
+      const description = get('description');
+      const position = get('position');
+      const email = get('email');
+
+      if (!name || !phone || !organization || !projectType || !description) {
+        status.classList.add('is-error');
+        status.textContent = 'Заполните обязательные поля.';
+        return;
+      }
+
+      // Compose backend's `message` field from the extended form data
+      const messageParts = [
+        `Организация: ${organization}`,
+        position && `Должность: ${position}`,
+        email && `Email: ${email}`,
+        `Тип проекта: ${projectType}`,
+        '',
+        description,
+      ].filter(Boolean);
+
+      const payload = {
+        name,
+        contact: phone,
+        message: messageParts.join('\n'),
+        source: 'homepage',
+      };
+
+      const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (submit) submit.disabled = true;
+      status.textContent = 'Отправляем…';
+
+      try {
+        const res = await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const body = await res.json().catch(() => null);
+          const code = body && typeof body === 'object' && 'error' in body ? body.error : res.status;
+          throw new Error(String(code));
+        }
+        form.hidden = true;
+        success.hidden = false;
+      } catch (err) {
+        status.classList.add('is-error');
+        const code = err instanceof Error ? err.message : 'unknown';
+        if (code === 'rate_limited') {
+          status.textContent = 'Слишком много заявок с этого адреса. Попробуйте позже или напишите на info@tetrasoft.uz';
+        } else {
+          status.textContent = 'Не удалось отправить. Попробуйте ещё раз или напишите на info@tetrasoft.uz';
+        }
+        if (submit) submit.disabled = false;
+      }
+    });
+  }
+</script>

@@ -1,0 +1,71 @@
+---
+const stats = [
+  { value: '28', suffix: '+', label: 'ЛЕТ ОПЫТА' },
+  { value: '17', suffix: '+', label: 'DGU-СЕРТИФИКАТОВ' },
+  { value: '2010', suffix: '', label: 'РАБОТАЕМ С ГТК' },
+  { value: '18', suffix: '', label: 'ПРОЕКТОВ' },
+];
+---
+
+<section class="stats" aria-label="Ключевые цифры">
+  <div class="container-x">
+    <ul class="stats__grid">
+      {stats.map(({ value, suffix, label }) => (
+        <li class="stats__item">
+          <div class="stats__number">
+            {value}{suffix && <span class="stats__plus">{suffix}</span>}
+          </div>
+          <div class="stats__label">{label}</div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .stats {
+    background: var(--brand-dark);
+    color: var(--text-on-dark);
+    padding-block: clamp(2.5rem, 4vw, 3.75rem);
+    border-top: 1px solid var(--border-dark);
+  }
+
+  .stats__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .stats__item {
+    min-width: 0;
+  }
+
+  .stats__number {
+    font-size: clamp(2.25rem, 3vw + 1rem, 3.25rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text-on-dark);
+  }
+
+  .stats__plus {
+    color: var(--brand-accent);
+    margin-left: 0.05em;
+  }
+
+  .stats__label {
+    margin-top: 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-on-dark-muted);
+  }
+
+  @media (max-width: 720px) {
+    .stats__grid { grid-template-columns: repeat(2, 1fr); gap: 1.75rem 1.25rem; }
+  }
+</style>

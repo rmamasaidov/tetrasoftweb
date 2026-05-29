@@ -1,0 +1,63 @@
+---
+import ContactForm from './ContactForm.astro';
+---
+
+<section id="contact" class="cta section-pad" aria-labelledby="cta-title">
+  <div class="cta__glow" aria-hidden="true"></div>
+  <div class="container-x cta__inner">
+    <div class="cta__copy fade-in">
+      <h2 id="cta-title" class="cta__h2">Расскажите о вашем проекте</h2>
+      <p class="cta__sub">
+        Опишите задачу — свяжемся в течение одного рабочего дня и подготовим предложение
+      </p>
+    </div>
+
+    <div class="cta__form fade-in">
+      <ContactForm />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    isolation: isolate;
+    background: var(--brand-dark);
+    color: var(--text-on-dark);
+    overflow: hidden;
+  }
+
+  .cta__glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 55% at 80% 30%, rgba(25, 113, 194, 0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 15% 80%, rgba(93, 202, 165, 0.18) 0%, transparent 60%);
+  }
+
+  .cta__inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .cta__copy { position: sticky; top: 96px; }
+
+  .cta__h2 {
+    color: var(--text-on-dark);
+    font-size: clamp(1.75rem, 2.2vw + 1rem, 2.5rem);
+  }
+  .cta__sub {
+    color: var(--text-on-dark-muted);
+    margin-top: 1rem;
+    font-size: 1.0625rem;
+    max-width: 48ch;
+  }
+
+  @media (max-width: 960px) {
+    .cta__inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .cta__copy { position: static; }
+  }
+</style>

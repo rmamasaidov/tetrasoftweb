@@ -1,20 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroVideo from '../components/HeroVideo.astro';
+import StatsBar from '../components/StatsBar.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import SegmentsBlock from '../components/SegmentsBlock.astro';
+import PortfolioFeatured from '../components/PortfolioFeatured.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import TrustLogos from '../components/TrustLogos.astro';
+import AboutBrief from '../components/AboutBrief.astro';
+import CTASection from '../components/CTASection.astro';
 ---
+
 <BaseLayout
   title="TETRASOFT — Корпоративная и государственная разработка ПО в Узбекистане"
   description="Разработка информационных систем для государственных органов и крупного бизнеса Узбекистана с 1997 года. Резидент IT Park. 17+ зарегистрированных программных продуктов."
   overHero={true}
 >
-  <section class="section-pad" style="background: var(--brand-dark); color: var(--text-on-dark); min-height: 60vh;">
-    <div class="container-x">
-      <p class="eyebrow eyebrow-on-dark">Резидент IT Park · с 1997 года</p>
-      <h1 style="margin-top: 1rem; color: var(--text-on-dark);">
-        Информационные системы для государства и бизнеса
-      </h1>
-      <p style="color: var(--text-on-dark-muted); max-width: 56ch; margin-top: 1.25rem;">
-        28 лет создаём решения, которым доверяют крупнейшие государственные органы Узбекистана
-      </p>
-    </div>
-  </section>
+  <HeroVideo />
+  <StatsBar />
+  <ServicesGrid />
+  <SegmentsBlock />
+  <PortfolioFeatured />
+  <ProcessSteps />
+  <TrustLogos />
+  <AboutBrief />
+  <CTASection />
 </BaseLayout>

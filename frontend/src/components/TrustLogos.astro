@@ -1,0 +1,62 @@
+---
+import SectionEyebrow from './SectionEyebrow.astro';
+
+const clients = [
+  'Государственный таможенный комитет',
+  'Министерство народного образования',
+  'Центр обучения государственному языку',
+  'Центр услуг в АПК',
+  'IT Park Узбекистана',
+];
+---
+
+<section class="trust section-pad" aria-labelledby="trust-title">
+  <div class="container-x">
+    <header class="trust__header fade-in">
+      <SectionEyebrow text="НАМ ДОВЕРЯЮТ" />
+      <h2 id="trust-title" class="trust__h2-sr">Нам доверяют</h2>
+    </header>
+
+    <ul class="trust__list fade-in" aria-label="Список ключевых клиентов">
+      {clients.map((name) => (
+        <li><span class="pill trust__pill">{name}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .trust { background: var(--bg-white); padding-block: clamp(3rem, 5vw, 4.5rem); }
+
+  .trust__header { margin-bottom: 1.75rem; }
+
+  .trust__h2-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .trust__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+
+  .trust__pill {
+    font-size: 0.875rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .trust__pill:hover {
+    background: var(--bg-white);
+    border-color: color-mix(in srgb, var(--brand-blue) 25%, var(--border-light));
+  }
+</style>

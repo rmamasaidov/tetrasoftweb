@@ -1,0 +1,47 @@
+---
+import SectionEyebrow from './SectionEyebrow.astro';
+---
+
+<section class="about-brief section-pad" aria-labelledby="about-brief-title">
+  <div class="container-x about-brief__inner fade-in">
+    <SectionEyebrow text="О КОМПАНИИ" />
+    <h2 id="about-brief-title" class="about-brief__h2">
+      28 лет создания информационных систем
+    </h2>
+
+    <div class="about-brief__text">
+      <p>
+        TETRASOFT основана в 1997 году. За почти три десятилетия компания прошла путь от
+        разработки локальных приложений до создания комплексных информационных систем
+        для крупнейших государственных органов Узбекистана.
+      </p>
+      <p>
+        Наша экспертиза подтверждена 17+ государственными сертификатами регистрации
+        программ (DGU), резидентством IT Park, международным патентом и многолетним
+        сотрудничеством с Государственным таможенным комитетом.
+      </p>
+      <p>
+        Сегодня мы фокусируемся на двух направлениях: разработка корпоративных систем
+        для бизнеса и государственные IT-решения с учётом регуляторных требований.
+      </p>
+    </div>
+
+    <a href="/about" class="btn btn-primary about-brief__cta">Подробнее о компании →</a>
+  </div>
+</section>
+
+<style>
+  .about-brief { background: var(--bg-white); border-top: 1px solid var(--border-light); }
+  .about-brief__inner { max-width: 760px; }
+  .about-brief__h2 { margin-top: 0.75rem; }
+  .about-brief__text {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.125rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .about-brief__cta { margin-top: 2rem; }
+</style>

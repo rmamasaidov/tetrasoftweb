@@ -1,0 +1,97 @@
+---
+import SectionEyebrow from './SectionEyebrow.astro';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <!-- Placeholder gradient; real video swapped in Phase C -->
+    <div class="hero__gradient"></div>
+    <div class="hero__noise"></div>
+  </div>
+
+  <div class="container-x hero__inner">
+    <SectionEyebrow text="Резидент IT Park · с 1997 года" onDark={true} />
+    <h1 id="hero-title" class="hero__title">
+      Информационные системы для государства и бизнеса
+    </h1>
+    <p class="hero__sub">
+      28 лет создаём решения, которым доверяют крупнейшие государственные органы Узбекистана
+    </p>
+    <div class="hero__cta">
+      <a href="#contact" class="btn btn-primary">Обсудить проект</a>
+      <a href="/portfolio" class="btn btn-outline-on-dark">Портфолио →</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    color: var(--text-on-dark);
+    /* Header is sticky 72px; we want hero to feel full-height yet leave space */
+    min-height: clamp(540px, 88vh, 760px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    /* Pull up under transparent header */
+    margin-top: -72px;
+    padding-top: 72px;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero__gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 40%, rgba(25, 113, 194, 0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 70% at 80% 70%, rgba(28, 46, 111, 0.55) 0%, transparent 60%),
+      linear-gradient(160deg, #0A1330 0%, #060B22 70%, #0A1330 100%);
+  }
+
+  .hero__noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    background:
+      linear-gradient(180deg, transparent 70%, rgba(6, 11, 34, 0.6) 100%);
+  }
+
+  .hero__inner {
+    width: 100%;
+    max-width: 980px;
+    position: relative;
+  }
+
+  .hero__title {
+    color: var(--text-on-dark);
+    margin-top: 1.25rem;
+    font-size: clamp(2rem, 3.6vw + 1rem, 3.5rem);
+    max-width: 22ch;
+    line-height: 1.08;
+  }
+
+  .hero__sub {
+    color: var(--text-on-dark-muted);
+    max-width: 56ch;
+    margin-top: 1.5rem;
+    font-size: clamp(1rem, 0.4vw + 0.95rem, 1.125rem);
+  }
+
+  .hero__cta {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 540px) {
+    .hero { min-height: 560px; }
+    .hero__cta .btn { flex: 1 1 auto; }
+  }
+</style>

@@ -1,0 +1,128 @@
+---
+import SectionEyebrow from './SectionEyebrow.astro';
+
+const steps = [
+  {
+    n: '01',
+    title: 'Анализ',
+    text: 'Изучаем бизнес-процессы заказчика, выявляем требования, определяем регуляторные ограничения.',
+  },
+  {
+    n: '02',
+    title: 'Проектирование',
+    text: 'Разрабатываем архитектуру, готовим прототип. Фиксируется объём, бюджет и сроки.',
+  },
+  {
+    n: '03',
+    title: 'Разработка',
+    text: 'Поэтапная разработка с регулярными демонстрациями. Заказчик видит результат и вносит коррективы по ходу.',
+  },
+  {
+    n: '04',
+    title: 'Внедрение и поддержка',
+    text: 'Развёртывание, обучение пользователей, документация. Долгосрочное сопровождение по отдельному договору.',
+  },
+];
+---
+
+<section class="process section-pad" aria-labelledby="process-title">
+  <div class="container-x">
+    <header class="process__header fade-in">
+      <SectionEyebrow text="ПРОЦЕСС" />
+      <h2 id="process-title" class="process__h2">
+        Прозрачный процесс — от анализа до поддержки
+      </h2>
+    </header>
+
+    <ol class="process__grid fade-in">
+      {steps.map((s) => (
+        <li class="step">
+          <div class="step__bullet">
+            <span class="step__n">{s.n}</span>
+          </div>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__text">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process { background: var(--bg-light); }
+
+  .process__header { margin-bottom: 2.5rem; max-width: 760px; }
+  .process__h2 { margin-top: 0.75rem; }
+
+  .process__grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    position: relative;
+  }
+
+  /* Connecting horizontal line on desktop, behind bullets */
+  .process__grid::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--border-light) 8%,
+      var(--border-light) 92%,
+      transparent 100%
+    );
+    z-index: 0;
+  }
+
+  .step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .step__bullet {
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    background: var(--bg-white);
+    border: 2px solid var(--brand-blue);
+    color: var(--brand-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+  }
+
+  .step__title {
+    font-size: 1.125rem;
+    margin: 0.25rem 0 0;
+    color: var(--text-primary);
+  }
+
+  .step__text {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 960px) {
+    .process__grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1.5rem; }
+    .process__grid::before { display: none; }
+  }
+  @media (max-width: 540px) {
+    .process__grid { grid-template-columns: 1fr; }
+  }
+</style>
