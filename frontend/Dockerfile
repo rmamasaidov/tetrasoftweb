@@ -24,13 +24,20 @@ COPY <<EOF /etc/caddy/Caddyfile
 :80 {
     root * /usr/share/caddy
     encode gzip zstd
-    try_files {path} {path}/ /index.html
     file_server
+
+    # Unknown paths get the prebuilt 404 page with a real 404 status
+    # (no SPA fallback: every route is a prerendered file).
+    handle_errors 404 {
+        rewrite * /404.html
+        file_server
+    }
 
     # Aggressive caching for hashed assets, no caching for HTML.
     @hashed path_regexp ^/_astro/
     header @hashed Cache-Control "public, max-age=31536000, immutable"
     header /*.html Cache-Control "public, max-age=0, must-revalidate"
+    header /video/* Cache-Control "public, max-age=2592000"
 }
 EOF
 

@@ -20,7 +20,7 @@ const icon = SECTOR_ICON[sector] as
 const sectorLabel = SECTOR_SHORT[sector];
 ---
 
-<a href={`/portfolio/${slug}`} class:list={["project-card", `project-card--${visual}`]} data-sector={sector}>
+<a href={`/portfolio/${slug}/`} class:list={["project-card", `project-card--${visual}`]} data-sector={sector}>
   <div class="project-card__visual" aria-hidden="true">
     <Icon name={icon} size={40} class="project-card__visual-icon" />
     <span class="project-card__visual-label">{sectorLabel}</span>

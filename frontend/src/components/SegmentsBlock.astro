@@ -47,7 +47,7 @@ const segments = [
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 1rem;
   }
 
@@ -86,13 +86,15 @@ const segments = [
     font-weight: 500;
     color: var(--text-primary);
     line-height: 1.35;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   @media (max-width: 1024px) {
-    .segments__grid { grid-template-columns: repeat(3, 1fr); }
+    .segments__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
   @media (max-width: 600px) {
-    .segments__grid { grid-template-columns: repeat(2, 1fr); }
+    .segments__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (prefers-reduced-motion: reduce) {

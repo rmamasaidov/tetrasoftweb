@@ -47,8 +47,8 @@ const related = sameSector.length >= 3
   description={project.data.summary}
   overHero={true}
   breadcrumbs={[
-    { name: 'Портфолио', url: '/portfolio' },
-    { name: project.data.title, url: `/portfolio/${project.data.slug}` },
+    { name: 'Портфолио', url: '/portfolio/' },
+    { name: project.data.title, url: `/portfolio/${project.data.slug}/` },
   ]}
   jsonLd={[projectJsonLd]}
 >
@@ -110,7 +110,7 @@ const related = sameSector.length >= 3
           ))}
         </ul>
         <div class="related__cta fade-in">
-          <a href="/portfolio" class="btn btn-ghost">Все проекты →</a>
+          <a href="/portfolio/" class="btn btn-ghost">Все проекты →</a>
         </div>
       </div>
     </section>

@@ -35,8 +35,8 @@ const related = relatedSlugs
   description={service.data.shortDescription}
   overHero={true}
   breadcrumbs={[
-    { name: 'Услуги', url: '/services' },
-    { name: service.data.title, url: `/services/${service.data.slug}` },
+    { name: 'Услуги', url: '/services/' },
+    { name: service.data.title, url: `/services/${service.data.slug}/` },
   ]}
 >
   <PageHero
@@ -74,7 +74,7 @@ const related = relatedSlugs
           ))}
         </ul>
         <div class="related__cta fade-in">
-          <a href="/portfolio" class="btn btn-ghost">Все проекты →</a>
+          <a href="/portfolio/" class="btn btn-ghost">Все проекты →</a>
         </div>
       </div>
     </section>

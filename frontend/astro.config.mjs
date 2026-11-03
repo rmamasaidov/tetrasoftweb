@@ -11,6 +11,11 @@ export default defineConfig({
   // Public site URL — used by Astro for sitemap, canonical URLs, og:url, etc.
   site: 'https://tetrasoft.uz',
 
+  // Every page is a directory (/about/index.html), so links and canonicals
+  // always end with a slash. Matches what the static server serves without
+  // a redirect.
+  trailingSlash: 'always',
+
   integrations: [
     sitemap({
       // Hint search engines about importance + cadence per route type.

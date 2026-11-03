@@ -7,7 +7,7 @@ import PortfolioCard from './PortfolioCard.astro';
 const order = ['gtk-narusheniya', 'ts-scale', 'nacionalnye-imena', 'med-ais'];
 const all = await getCollection('portfolio');
 const projects = order
-  .map((s) => all.find((p) => p.slug === s))
+  .map((s) => all.find((p) => p.data.slug === s))
   .filter((p): p is NonNullable<typeof p> => Boolean(p));
 ---
 
@@ -37,7 +37,7 @@ const projects = order
     </ul>
 
     <div class="portfolio-featured__cta fade-in">
-      <a href="/portfolio" class="btn btn-primary">Все проекты →</a>
+      <a href="/portfolio/" class="btn btn-primary">Все проекты →</a>
     </div>
   </div>
 </section>

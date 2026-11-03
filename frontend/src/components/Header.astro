@@ -9,16 +9,16 @@ interface Props {
 const { overHero = false, currentPath = '' } = Astro.props;
 
 const nav = [
-  { href: '/about', label: 'О компании' },
-  { href: '/services', label: 'Услуги' },
-  { href: '/portfolio', label: 'Портфолио' },
-  { href: '/contacts', label: 'Контакты' },
+  { href: '/about/', label: 'О компании' },
+  { href: '/services/', label: 'Услуги' },
+  { href: '/portfolio/', label: 'Портфолио' },
+  { href: '/contacts/', label: 'Контакты' },
 ];
 
 function isActive(href: string) {
   if (!currentPath) return false;
   if (href === '/') return currentPath === '/';
-  return currentPath === href || currentPath.startsWith(href + '/');
+  return currentPath === href || (href !== '/' && currentPath.startsWith(href));
 }
 ---
 

@@ -30,7 +30,7 @@ type ServiceIcon =
   title="Услуги — TETRASOFT"
   description="Услуги TETRASOFT: государственные IT-решения, корпоративная разработка, AI-интеграция, модернизация legacy-систем, техническая поддержка."
   overHero={true}
-  breadcrumbs={[{ name: 'Услуги', url: '/services' }]}
+  breadcrumbs={[{ name: 'Услуги', url: '/services/' }]}
 >
   <PageHero
     eyebrow="УСЛУГИ"
@@ -57,7 +57,7 @@ type ServiceIcon =
               <h3 class="srv-card__title">{s.data.title}</h3>
               <p class="srv-card__desc">{s.data.shortDescription}</p>
               <p class="srv-card__target"><strong>Для кого:</strong> {s.data.targetClient}</p>
-              <a href={`/services/${s.data.slug}`} class="btn btn-ghost srv-card__link">
+              <a href={`/services/${s.data.slug}/`} class="btn btn-ghost srv-card__link">
                 Подробнее <Icon name="arrow-right" size={16} />
               </a>
             </div>
